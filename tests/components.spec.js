@@ -42,8 +42,8 @@ describe('ProgressBarsContainer', () => {
 
       expect(wrapper.find('li')).to.have.length(2);
 
-      expect(wrapper.html()).to.contain('<li>62</li>');
-      expect(wrapper.html()).to.contain('<li>45</li>');
+      expect(wrapper.html()).to.contain('<li>62%</li>');
+      expect(wrapper.html()).to.contain('<li>45%</li>');
     });
   });
 

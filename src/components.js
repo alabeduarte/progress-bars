@@ -25,7 +25,7 @@ export class Bars extends Component {
       (
         <ul>
           {this.props.progressBars.map( (progressBar, index) => (
-            <li key={index}>{progressBar}</li>
+            <li key={index}>{progressBar}%</li>
           ))}
         </ul>
       ) : null
