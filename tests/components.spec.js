@@ -2,7 +2,7 @@ import React from 'react';
 import { expect } from 'chai';
 import { shallow, mount } from 'enzyme';
 
-import { ProgressBarsContainer, Title, Bars, BarsSelector, Buttons } from '../src/components';
+import { ProgressBarsContainer, Title, ProgressBarList, Bar, BarSelector, Buttons } from '../src/components';
 
 describe('ProgressBarsContainer', () => {
   it('renders components', () => {
@@ -10,8 +10,8 @@ describe('ProgressBarsContainer', () => {
 
     expect(wrapper.containsAllMatchingElements([
       <Title/>,
-      <Bars/>,
-      <BarsSelector/>,
+      <ProgressBarList/>,
+      <BarSelector/>,
       <Buttons/>
     ])).to.equal(true);
   });
@@ -24,21 +24,21 @@ describe('ProgressBarsContainer', () => {
     });
   });
 
-  describe('Bars', () => {
+  describe('ProgressBarList', () => {
     it('not render progress bars when items are undefined', () => {
-      const wrapper = shallow(<Bars progressBars={undefined}/>);
+      const wrapper = shallow(<ProgressBarList bars={undefined}/>);
 
       expect(wrapper.find('li')).to.have.length(0);
     });
 
     it('not render progress bars when items are empty', () => {
-      const wrapper = shallow(<Bars progressBars={[]}/>);
+      const wrapper = shallow(<ProgressBarList bars={[]}/>);
 
       expect(wrapper.find('li')).to.have.length(0);
     });
 
     it('renders all given progress bars', () => {
-      const wrapper = shallow(<Bars progressBars={[62, 45]}/>);
+      const wrapper = shallow(<ProgressBarList bars={[62, 45]}/>);
 
       expect(wrapper.find('li')).to.have.length(2);
 

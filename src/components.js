@@ -5,8 +5,8 @@ export class ProgressBarsContainer extends Component {
     return (
       <div>
         <Title/>
-        <Bars/>
-        <BarsSelector/>
+        <ProgressBarList/>
+        <BarSelector/>
         <Buttons/>
       </div>
     )
@@ -19,20 +19,26 @@ export class Title extends Component {
   }
 }
 
-export class Bars extends Component {
+export class ProgressBarList extends Component {
   render() {
-    return this.props.progressBars ?
+    return this.props.bars ?
       (
         <ul>
-          {this.props.progressBars.map( (progressBar, index) => (
-            <li key={index}>{progressBar}%</li>
+          {this.props.bars.map( (bar, index) => (
+            <li key={index}>{bar}%</li>
           ))}
         </ul>
       ) : null
   }
 }
 
-export class BarsSelector extends Component {
+export class Bar extends Component {
+  render() {
+    return null
+  }
+}
+
+export class BarSelector extends Component {
   render() { return null }
 }
 
