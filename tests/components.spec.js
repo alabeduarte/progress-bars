@@ -81,12 +81,12 @@ describe('ProgressBarsContainer', () => {
     });
 
     it('selects the first bar by default', () => {
-      const wrapper = shallow(<BarSelector bars={[1, 2]}/>);
+      const wrapper = shallow(<BarSelector bars={[30, 44]}/>);
 
       expect(wrapper.find('option')).to.have.length(2);
 
-      expect(wrapper.html()).to.contain(`<option selected="" value="1">1</option>`);
-      expect(wrapper.html()).to.contain(`<option value="2">2</option>`);
+      expect(wrapper.html()).to.contain(`<option selected="" value="30">#progress1</option>`);
+      expect(wrapper.html()).to.contain(`<option value="44">#progress2</option>`);
     });
   });
 

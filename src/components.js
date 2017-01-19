@@ -53,7 +53,7 @@ export class BarSelector extends Component {
       (
         <select value={this.state.optionState}>
           {this.props.bars.map((bar, index) => (
-            <option key={index} value={bar}>{bar}</option>
+            <option key={index} value={bar}>#progress{index + 1}</option>
           ))}
         </select>
       ) : null
