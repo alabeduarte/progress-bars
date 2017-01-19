@@ -20,13 +20,22 @@ export class Title extends Component {
 }
 
 export class Bars extends Component {
-  render() {}
+  render() {
+    return this.props.progressBars ?
+      (
+        <ul>
+          {this.props.progressBars.map( (progressBar) => (
+            <li>{progressBar}</li>
+          ))}
+        </ul>
+      ) : null
+  }
 }
 
 export class BarsSelector extends Component {
-  render() {}
+  render() { return null }
 }
 
 export class Buttons extends Component {
-  render() {}
+  render() { return null }
 }
