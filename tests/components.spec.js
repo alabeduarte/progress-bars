@@ -41,6 +41,9 @@ describe('ProgressBarsContainer', () => {
       const wrapper = shallow(<Bars progressBars={[62, 45]}/>);
 
       expect(wrapper.find('li')).to.have.length(2);
+
+      expect(wrapper.html()).to.contain('<li>62</li>');
+      expect(wrapper.html()).to.contain('<li>45</li>');
     });
   });
 
@@ -59,6 +62,8 @@ describe('ProgressBarsContainer', () => {
 
     it('renders all given progress bars', () => {
       const wrapper = mount(<Buttons rateNumbers={[8, -2, 5]}/>);
+
+      expect(wrapper.find('li')).to.have.length(3);
 
       expect(wrapper.html()).to.contain('<li><button>8</button></li>');
       expect(wrapper.html()).to.contain('<li><button>-2</button></li>');
