@@ -43,4 +43,26 @@ describe('ProgressBarsContainer', () => {
       expect(wrapper.find('li')).to.have.length(2);
     });
   });
+
+  describe('Buttons', () => {
+    it('not render rate numbers when items are undefined', () => {
+      const wrapper = shallow(<Buttons rateNumbers={undefined}/>);
+
+      expect(wrapper.find('li')).to.have.length(0);
+    });
+
+    it('not render progress bars when items are empty', () => {
+      const wrapper = shallow(<Buttons rateNumbers={[]}/>);
+
+      expect(wrapper.find('li')).to.have.length(0);
+    });
+
+    it('renders all given progress bars', () => {
+      const wrapper = mount(<Buttons rateNumbers={[8, -2, 5]}/>);
+
+      expect(wrapper.html()).to.contain('<li><button>8</button></li>');
+      expect(wrapper.html()).to.contain('<li><button>-2</button></li>');
+      expect(wrapper.html()).to.contain('<li><button>5</button></li>');
+    });
+  });
 });

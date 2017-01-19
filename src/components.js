@@ -24,8 +24,8 @@ export class Bars extends Component {
     return this.props.progressBars ?
       (
         <ul>
-          {this.props.progressBars.map( (progressBar) => (
-            <li>{progressBar}</li>
+          {this.props.progressBars.map( (progressBar, index) => (
+            <li key={index}>{progressBar}</li>
           ))}
         </ul>
       ) : null
@@ -37,5 +37,14 @@ export class BarsSelector extends Component {
 }
 
 export class Buttons extends Component {
-  render() { return null }
+  render() {
+    return this.props.rateNumbers ?
+      (
+        <ul>
+          {this.props.rateNumbers.map( (rateNumber, index) => (
+            <li key={index}><button>{rateNumber}</button></li>
+          ))}
+        </ul>
+      ) : null
+  }
 }
