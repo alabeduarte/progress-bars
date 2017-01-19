@@ -2,14 +2,17 @@ import React from 'react';
 import { expect } from 'chai';
 import { shallow, mount } from 'enzyme';
 
-import { ProgressBarsContainer, Title } from '../src/components';
+import { ProgressBarsContainer, Title, Bars, BarsSelector, Buttons } from '../src/components';
 
 describe('ProgressBarsContainer', () => {
   it('renders components', () => {
     const wrapper = shallow(<ProgressBarsContainer/>);
 
     expect(wrapper.containsAllMatchingElements([
-      <Title/>
+      <Title/>,
+      <Bars/>,
+      <BarsSelector/>,
+      <Buttons/>
     ])).to.equal(true);
   });
 
