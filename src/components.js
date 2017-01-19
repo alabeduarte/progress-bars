@@ -41,7 +41,9 @@ export class Buttons extends Component {
     return this.props.rateNumbers ?
       (
         <ul>
-          {this.props.rateNumbers.map( (rateNumber, index) => (
+          {this.props.rateNumbers.map( (rateNumber) => {
+            return rateNumber > 0 ? `+${rateNumber}` : rateNumber.toString();
+          }).map( (rateNumber, index) => (
             <li key={index}><button>{rateNumber}</button></li>
           ))}
         </ul>

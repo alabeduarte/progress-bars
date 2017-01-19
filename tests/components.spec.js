@@ -65,9 +65,9 @@ describe('ProgressBarsContainer', () => {
 
       expect(wrapper.find('li')).to.have.length(3);
 
-      expect(wrapper.html()).to.contain('<li><button>8</button></li>');
+      expect(wrapper.html()).to.contain('<li><button>+8</button></li>');
       expect(wrapper.html()).to.contain('<li><button>-2</button></li>');
-      expect(wrapper.html()).to.contain('<li><button>5</button></li>');
+      expect(wrapper.html()).to.contain('<li><button>+5</button></li>');
     });
   });
 });
