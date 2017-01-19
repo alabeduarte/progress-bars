@@ -40,7 +40,24 @@ export class Bar extends Component {
 }
 
 export class BarSelector extends Component {
-  render() { return null }
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      optionState: this.props.bars ? this.props.bars[0] : ''
+    }
+  }
+
+  render() {
+    return this.props.bars ?
+      (
+        <select value={this.state.optionState}>
+          {this.props.bars.map((bar, index) => (
+            <option key={index} value={bar}>{bar}</option>
+          ))}
+        </select>
+      ) : null
+  }
 }
 
 export class Buttons extends Component {

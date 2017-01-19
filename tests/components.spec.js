@@ -67,6 +67,29 @@ describe('ProgressBarsContainer', () => {
     });
   });
 
+  describe('BarSelector', () => {
+    it('not render selected bar when progress bar list is empty', () => {
+      const wrapper = shallow(<BarSelector bars={[]}/>);
+
+      expect(wrapper.find('option')).to.have.length(0);
+    });
+
+    it('not render selected bar when progress bar list is undefined', () => {
+      const wrapper = shallow(<BarSelector bars={undefined}/>);
+
+      expect(wrapper.find('option')).to.have.length(0);
+    });
+
+    it('selects the first bar by default', () => {
+      const wrapper = shallow(<BarSelector bars={[1, 2]}/>);
+
+      expect(wrapper.find('option')).to.have.length(2);
+
+      expect(wrapper.html()).to.contain(`<option selected="" value="1">1</option>`);
+      expect(wrapper.html()).to.contain(`<option value="2">2</option>`);
+    });
+  });
+
   describe('Buttons', () => {
     it('not render rate numbers when items are undefined', () => {
       const wrapper = shallow(<Buttons rateNumbers={undefined}/>);
