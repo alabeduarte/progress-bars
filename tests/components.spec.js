@@ -88,6 +88,20 @@ describe('ProgressBarsContainer', () => {
       expect(wrapper.html()).to.contain(`<option selected="" value="30">#progress1</option>`);
       expect(wrapper.html()).to.contain(`<option value="44">#progress2</option>`);
     });
+
+    it('handles selection state change', () => {
+      const wrapper = shallow(<BarSelector bars={[1, 2, 3]}/>);
+
+      expect(wrapper.html()).to.contain(`<option selected="" value="1">#progress1</option>`);
+      expect(wrapper.html()).to.contain(`<option value="2">#progress2</option>`);
+      expect(wrapper.html()).to.contain(`<option value="3">#progress3</option>`);
+
+      wrapper.find('select').simulate('change', { target: { value: 2 } });
+
+      expect(wrapper.html()).to.contain(`<option value="1">#progress1</option>`);
+      expect(wrapper.html()).to.contain(`<option selected="" value="2">#progress2</option>`);
+      expect(wrapper.html()).to.contain(`<option value="3">#progress3</option>`);
+    });
   });
 
   describe('Buttons', () => {

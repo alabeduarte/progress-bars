@@ -44,14 +44,20 @@ export class BarSelector extends Component {
     super(props);
 
     this.state = {
-      optionState: this.props.bars ? this.props.bars[0] : ''
+      selectedBar: this.props.bars ? this.props.bars[0] : ''
     }
+
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({ selectedBar: event.target.value });
   }
 
   render() {
     return this.props.bars ?
       (
-        <select value={this.state.optionState}>
+        <select value={this.state.selectedBar} onChange={this.handleChange}>
           {this.props.bars.map((bar, index) => (
             <option key={index} value={bar}>#progress{index + 1}</option>
           ))}
