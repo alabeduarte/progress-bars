@@ -25,7 +25,7 @@ export class ProgressBarList extends Component {
       (
         <ul>
           {this.props.bars.map( (bar, index) => (
-            <li key={index}>{bar}%</li>
+            <li key={index}><Bar value={bar}/></li>
           ))}
         </ul>
       ) : null
@@ -34,7 +34,8 @@ export class ProgressBarList extends Component {
 
 export class Bar extends Component {
   render() {
-    return null
+    return (this.props.value && this.props.value >= 0) ?
+      (<label>{this.props.value}%</label>) : (<label>0%</label>)
   }
 }
 

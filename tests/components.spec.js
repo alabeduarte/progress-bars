@@ -42,8 +42,28 @@ describe('ProgressBarsContainer', () => {
 
       expect(wrapper.find('li')).to.have.length(2);
 
-      expect(wrapper.html()).to.contain('<li>62%</li>');
-      expect(wrapper.html()).to.contain('<li>45%</li>');
+      expect(wrapper.contains(<li><Bar value={62}/></li>)).to.equal(true);
+      expect(wrapper.contains(<li><Bar value={45}/></li>)).to.equal(true);
+    });
+  });
+
+  describe('Bar', () => {
+    it('renders percentual representation', () => {
+      const wrapper = shallow(<Bar value={25}/>);
+
+      expect(wrapper.text()).to.contain('25%');
+    });
+
+    it('renders 0% when value is undefined', () => {
+      const wrapper = shallow(<Bar value={undefined}/>);
+
+      expect(wrapper.text()).to.contain('0%');
+    });
+
+    it('renders 0% when value is less than 0', () => {
+      const wrapper = shallow(<Bar value={-1}/>);
+
+      expect(wrapper.text()).to.contain('0%');
     });
   });
 
