@@ -1,13 +1,35 @@
 import React, { Component } from 'react';
 
 export class ProgressBarsContainer extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      bars: [],
+      rateNumbers: []
+    }
+
+    this.http = this.props.http;
+  }
+
+  async componentWillMount() {
+    const baseUrl = 'http://frontend-exercise.apps.staging.digital.gov.au';
+    const response = await this.http.get(`${baseUrl}/bars`);
+    const data = response.data
+
+    this.setState({
+      bars: data.bars,
+      rateNumbers: data.buttons
+    });
+  }
+
   render() {
     return (
       <div>
         <Title/>
-        <ProgressBarList/>
-        <BarSelector/>
-        <Buttons/>
+        <ProgressBarList bars={this.state.bars}/>
+        <BarSelector bars={this.state.bars}/>
+        <Buttons rateNumbers={this.state.rateNumbers}/>
       </div>
     )
   }

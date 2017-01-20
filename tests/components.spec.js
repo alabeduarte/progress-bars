@@ -6,13 +6,40 @@ import { ProgressBarsContainer, Title, ProgressBarList, Bar, BarSelector, Button
 
 describe('ProgressBarsContainer', () => {
   it('renders components', () => {
-    const wrapper = shallow(<ProgressBarsContainer/>);
+    const http = {
+      get: (uri) => {
+        return { data: {} }
+      }
+    };
+
+    const wrapper = shallow(<ProgressBarsContainer http={http}/>);
 
     expect(wrapper.containsAllMatchingElements([
       <Title/>,
       <ProgressBarList/>,
       <BarSelector/>,
       <Buttons/>
+    ])).to.equal(true);
+  });
+
+  it('fetches data endpoint', async () => {
+    const bars = [1, 2];
+    const rateNumbers = [5, 6, 7];
+
+    const http = {
+      get: (uri) => {
+        return Promise.resolve({
+          data: { bars: bars, buttons: rateNumbers }
+        });
+      }
+    };
+
+    const wrapper = await shallow(<ProgressBarsContainer http={http}/>);
+
+    expect(wrapper.containsAllMatchingElements([
+      <ProgressBarList bars={bars}/>,
+      <BarSelector bars={bars}/>,
+      <Buttons rateNumbers={rateNumbers}/>
     ])).to.equal(true);
   });
 
