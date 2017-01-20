@@ -10,6 +10,18 @@ export class ProgressBarsContainer extends Component {
     }
 
     this.http = this.props.http;
+    this.increase = this.increase.bind(this);
+  }
+
+  increase(barIndex, numberRateIndex) {
+    const bars = this.state.bars;
+    const numberRate = this.state.numberRates[numberRateIndex];
+
+    this.setState({
+      bars: bars.map( (bar, index) => {
+        return index === barIndex ? bar + numberRate : bar;
+      })
+    });
   }
 
   async componentWillMount() {
@@ -106,7 +118,7 @@ export class ButtonList extends Component {
 export class NumberRateButton extends Component {
   render() {
     return (
-      <button>{this.props.value}</button>
+      <button value={this.props.value}>{this.props.value}</button>
     )
   }
 }

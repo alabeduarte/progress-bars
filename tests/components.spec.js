@@ -43,6 +43,37 @@ describe('ProgressBarsContainer', () => {
     ])).to.equal(true);
   });
 
+  describe('Increasing/Decreasing progress bars', () => {
+    const bars = [1, 10, 5];
+    const numberRates = [-3, 2];
+
+    const http = {
+      get: (uri) => {
+        return Promise.resolve({
+          data: { bars: bars, buttons: numberRates }
+        });
+      }
+    };
+
+    it('increases bar percentage by rate number', async () => {
+      const wrapper = await shallow(<ProgressBarsContainer http={http}/>);
+
+      wrapper.instance().increase(0, 1) ;
+
+      expect(wrapper.state('bars')).to.eql([3, 10, 5]);
+      expect(wrapper.state('numberRates')).to.eql([-3, 2]);
+    });
+
+    it('decreases bar percentage by rate number', async () => {
+      const wrapper = await shallow(<ProgressBarsContainer http={http}/>);
+
+      wrapper.instance().increase(1, 0);
+
+      expect(wrapper.state('bars')).to.eql([1, 7, 5]);
+      expect(wrapper.state('numberRates')).to.eql([-3, 2]);
+    });
+  });
+
   describe('Title', () => {
     it('renders title', () => {
       const wrapper = shallow(<Title/>);
