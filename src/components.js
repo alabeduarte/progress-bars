@@ -6,7 +6,7 @@ export class ProgressBarsContainer extends Component {
 
     this.state = {
       bars: [],
-      rateNumbers: []
+      numberRates: []
     }
 
     this.http = this.props.http;
@@ -19,7 +19,7 @@ export class ProgressBarsContainer extends Component {
 
     this.setState({
       bars: data.bars,
-      rateNumbers: data.buttons
+      numberRates: data.buttons
     });
   }
 
@@ -29,7 +29,7 @@ export class ProgressBarsContainer extends Component {
         <Title/>
         <ProgressBarList bars={this.state.bars}/>
         <BarSelector bars={this.state.bars}/>
-        <Buttons rateNumbers={this.state.rateNumbers}/>
+        <ButtonList numberRates={this.state.numberRates}/>
       </div>
     )
   }
@@ -88,17 +88,25 @@ export class BarSelector extends Component {
   }
 }
 
-export class Buttons extends Component {
+export class ButtonList extends Component {
   render() {
-    return this.props.rateNumbers ?
+    return this.props.numberRates ?
       (
         <ul>
-          {this.props.rateNumbers.map( (rateNumber) => {
-            return rateNumber > 0 ? `+${rateNumber}` : rateNumber.toString();
-          }).map( (rateNumber, index) => (
-            <li key={index}><button>{rateNumber}</button></li>
+          {this.props.numberRates.map( (numberRate) => {
+            return numberRate > 0 ? `+${numberRate}` : numberRate.toString();
+          }).map( (numberRate, index) => (
+            <li key={index}><NumberRateButton value={numberRate}></NumberRateButton></li>
           ))}
         </ul>
       ) : null
+  }
+}
+
+export class NumberRateButton extends Component {
+  render() {
+    return (
+      <button>{this.props.value}</button>
+    )
   }
 }

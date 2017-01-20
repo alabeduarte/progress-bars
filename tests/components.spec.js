@@ -2,7 +2,7 @@ import React from 'react';
 import { expect } from 'chai';
 import { shallow, mount } from 'enzyme';
 
-import { ProgressBarsContainer, Title, ProgressBarList, Bar, BarSelector, Buttons } from '../src/components';
+import { ProgressBarsContainer, Title, ProgressBarList, Bar, BarSelector, ButtonList, NumberRateButton } from '../src/components';
 
 describe('ProgressBarsContainer', () => {
   it('renders components', () => {
@@ -18,18 +18,18 @@ describe('ProgressBarsContainer', () => {
       <Title/>,
       <ProgressBarList/>,
       <BarSelector/>,
-      <Buttons/>
+      <ButtonList/>
     ])).to.equal(true);
   });
 
   it('fetches data endpoint', async () => {
     const bars = [1, 2];
-    const rateNumbers = [5, 6, 7];
+    const numberRates = [5, 6, 7];
 
     const http = {
       get: (uri) => {
         return Promise.resolve({
-          data: { bars: bars, buttons: rateNumbers }
+          data: { bars: bars, buttons: numberRates }
         });
       }
     };
@@ -39,7 +39,7 @@ describe('ProgressBarsContainer', () => {
     expect(wrapper.containsAllMatchingElements([
       <ProgressBarList bars={bars}/>,
       <BarSelector bars={bars}/>,
-      <Buttons rateNumbers={rateNumbers}/>
+      <ButtonList numberRates={numberRates}/>
     ])).to.equal(true);
   });
 
@@ -72,25 +72,25 @@ describe('ProgressBarsContainer', () => {
       expect(wrapper.contains(<li><Bar value={62}/></li>)).to.equal(true);
       expect(wrapper.contains(<li><Bar value={45}/></li>)).to.equal(true);
     });
-  });
 
-  describe('Bar', () => {
-    it('renders percentual representation', () => {
-      const wrapper = shallow(<Bar value={25}/>);
+    describe('Bar', () => {
+      it('renders percentual representation', () => {
+        const wrapper = shallow(<Bar value={25}/>);
 
-      expect(wrapper.text()).to.contain('25%');
-    });
+        expect(wrapper.text()).to.contain('25%');
+      });
 
-    it('renders 0% when value is undefined', () => {
-      const wrapper = shallow(<Bar value={undefined}/>);
+      it('renders 0% when value is undefined', () => {
+        const wrapper = shallow(<Bar value={undefined}/>);
 
-      expect(wrapper.text()).to.contain('0%');
-    });
+        expect(wrapper.text()).to.contain('0%');
+      });
 
-    it('renders 0% when value is less than 0', () => {
-      const wrapper = shallow(<Bar value={-1}/>);
+      it('renders 0% when value is less than 0', () => {
+        const wrapper = shallow(<Bar value={-1}/>);
 
-      expect(wrapper.text()).to.contain('0%');
+        expect(wrapper.text()).to.contain('0%');
+      });
     });
   });
 
@@ -131,27 +131,27 @@ describe('ProgressBarsContainer', () => {
     });
   });
 
-  describe('Buttons', () => {
+  describe('ButtonList', () => {
     it('not render rate numbers when items are undefined', () => {
-      const wrapper = shallow(<Buttons rateNumbers={undefined}/>);
+      const wrapper = shallow(<ButtonList numberRates={undefined}/>);
 
       expect(wrapper.find('li')).to.have.length(0);
     });
 
     it('not render progress bars when items are empty', () => {
-      const wrapper = shallow(<Buttons rateNumbers={[]}/>);
+      const wrapper = shallow(<ButtonList numberRates={[]}/>);
 
       expect(wrapper.find('li')).to.have.length(0);
     });
 
-    it('renders all given progress bars', () => {
-      const wrapper = mount(<Buttons rateNumbers={[8, -2, 5]}/>);
+    it('renders number rates appending positive/negative signs', () => {
+      const wrapper = mount(<ButtonList numberRates={[8, -2, 5]}/>);
 
       expect(wrapper.find('li')).to.have.length(3);
 
-      expect(wrapper.html()).to.contain('<li><button>+8</button></li>');
-      expect(wrapper.html()).to.contain('<li><button>-2</button></li>');
-      expect(wrapper.html()).to.contain('<li><button>+5</button></li>');
+      expect(wrapper.contains(<li><NumberRateButton value={'+8'}></NumberRateButton></li>)).to.equal(true);
+      expect(wrapper.contains(<li><NumberRateButton value={'-2'}></NumberRateButton></li>)).to.equal(true);
+      expect(wrapper.contains(<li><NumberRateButton value={'+5'}></NumberRateButton></li>)).to.equal(true);
     });
   });
 });
