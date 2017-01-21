@@ -6,21 +6,26 @@ export class ProgressBarsContainer extends Component {
 
     this.state = {
       bars: [],
-      numberRates: []
+      numberRates: [],
+      selectedBar: {}
     }
 
     this.http = this.props.http;
     this.increase = this.increase.bind(this);
+    this.selectedBarChanged = this.selectedBarChanged.bind(this);
   }
 
-  increase(barIndex, numberRateIndex) {
-    const bars = this.state.bars;
-    const numberRate = this.state.numberRates[numberRateIndex];
+  selectedBarChanged(selectedBar) {
+    this.setState({ selectedBar: selectedBar });
+  }
 
+  increase(value) {
     this.setState({
-      bars: bars.map( (bar, index) => {
-        return index === barIndex ? bar + numberRate : bar;
-      })
+      bars: this.state.bars.map( (bar) => {
+        return bar === this.state.selectedBar ?
+          Number(bar) + Number(value) : bar;
+      }),
+      selectedBar: Number(this.state.selectedBar) + Number(value)
     });
   }
 
@@ -31,7 +36,8 @@ export class ProgressBarsContainer extends Component {
 
     this.setState({
       bars: data.bars,
-      numberRates: data.buttons
+      numberRates: data.buttons,
+      selectedBar: data.bars ? data.bars[0] : ''
     });
   }
 
@@ -40,8 +46,8 @@ export class ProgressBarsContainer extends Component {
       <div>
         <Title/>
         <ProgressBarList bars={this.state.bars}/>
-        <BarSelector bars={this.state.bars}/>
-        <ButtonList numberRates={this.state.numberRates}/>
+        <BarSelector selectedBar={this.state.selectedBar} bars={this.state.bars} handleChange={this.selectedBarChanged}/>
+        <ButtonList numberRates={this.state.numberRates} handleClick={this.increase}/>
       </div>
     )
   }
@@ -77,21 +83,17 @@ export class BarSelector extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      selectedBar: this.props.bars ? this.props.bars[0] : ''
-    }
-
     this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(event) {
-    this.setState({ selectedBar: event.target.value });
+    this.props.handleChange(event.target.value);
   }
 
   render() {
     return this.props.bars ?
       (
-        <select value={this.state.selectedBar} onChange={this.handleChange}>
+        <select value={this.props.selectedBar} onChange={this.handleChange}>
           {this.props.bars.map((bar, index) => (
             <option key={index} value={bar}>#progress{index + 1}</option>
           ))}
@@ -101,6 +103,16 @@ export class BarSelector extends Component {
 }
 
 export class ButtonList extends Component {
+  constructor(props) {
+    super(props);
+
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick(event) {
+    this.props.handleClick(event.target.value);
+  }
+
   render() {
     return this.props.numberRates ?
       (
@@ -108,7 +120,7 @@ export class ButtonList extends Component {
           {this.props.numberRates.map( (numberRate) => {
             return numberRate > 0 ? `+${numberRate}` : numberRate.toString();
           }).map( (numberRate, index) => (
-            <li key={index}><NumberRateButton value={numberRate}></NumberRateButton></li>
+            <li key={index}><NumberRateButton value={numberRate} handleClick={this.handleClick}/></li>
           ))}
         </ul>
       ) : null
@@ -118,7 +130,7 @@ export class ButtonList extends Component {
 export class NumberRateButton extends Component {
   render() {
     return (
-      <button value={this.props.value}>{this.props.value}</button>
+      <button value={this.props.value} onClick={this.props.handleClick}>{this.props.value}</button>
     )
   }
 }

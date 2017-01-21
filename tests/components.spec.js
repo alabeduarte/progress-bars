@@ -35,10 +35,11 @@ describe('ProgressBarsContainer', () => {
     };
 
     const wrapper = await shallow(<ProgressBarsContainer http={http}/>);
+    const selectedBarChanged = wrapper.instance().selectedBarChanged;
 
     expect(wrapper.containsAllMatchingElements([
       <ProgressBarList bars={bars}/>,
-      <BarSelector bars={bars}/>,
+      <BarSelector selectedBar={bars[0]} bars={bars} handleChange={selectedBarChanged}/>,
       <ButtonList numberRates={numberRates}/>
     ])).to.equal(true);
   });
@@ -58,7 +59,9 @@ describe('ProgressBarsContainer', () => {
     it('increases bar percentage by rate number', async () => {
       const wrapper = await shallow(<ProgressBarsContainer http={http}/>);
 
-      wrapper.instance().increase(0, 1) ;
+      expect(wrapper.state('bars')).to.eql([1, 10, 5]);
+
+      wrapper.instance().increase(2) ;
 
       expect(wrapper.state('bars')).to.eql([3, 10, 5]);
       expect(wrapper.state('numberRates')).to.eql([-3, 2]);
@@ -66,11 +69,66 @@ describe('ProgressBarsContainer', () => {
 
     it('decreases bar percentage by rate number', async () => {
       const wrapper = await shallow(<ProgressBarsContainer http={http}/>);
+      wrapper.setState({ selectedBar: 10 });
 
-      wrapper.instance().increase(1, 0);
+      expect(wrapper.state('bars')).to.eql([1, 10, 5]);
+
+      wrapper.instance().increase(-3);
 
       expect(wrapper.state('bars')).to.eql([1, 7, 5]);
       expect(wrapper.state('numberRates')).to.eql([-3, 2]);
+    });
+
+    it('updates selected bar after increase', async () => {
+      const wrapper = await shallow(<ProgressBarsContainer http={http}/>);
+      wrapper.setState({ selectedBar: 5 });
+
+      expect(wrapper.state('bars')).to.eql([1, 10, 5]);
+
+      wrapper.instance().increase(2);
+
+      expect(wrapper.state('bars')).to.eql([1, 10, 7]);
+      expect(wrapper.state('numberRates')).to.eql([-3, 2]);
+      expect(wrapper.state('selectedBar')).to.eql(7);
+    });
+
+    xit('bind increase logic with Number Rate Button component', async () => {
+      const wrapper = await shallow(<ProgressBarsContainer http={http}/>);
+      const button = wrapper.find('button[value="2"]');
+      const increase = wrapper.instance().increase;
+
+      expect(wrapper.state('bars')).to.eql([1, 10, 5]);
+
+      button.simulate('click');
+
+      expect(wrapper.state('bars')).to.eql([3, 10, 5]);
+    });
+  });
+
+  describe('Progress bar selection', () => {
+    const bars = [1, 10, 5];
+    const numberRates = [-3, 2];
+
+    const http = {
+      get: (uri) => {
+        return Promise.resolve({
+          data: { bars: bars, buttons: numberRates }
+        });
+      }
+    };
+
+    it('selects the first bar by default', async () => {
+      const wrapper = await mount(<ProgressBarsContainer http={http}/>);
+
+      expect(wrapper.state('selectedBar')).to.eql(1);
+    });
+
+    it('handles selection state change', async () => {
+      const wrapper = await mount(<ProgressBarsContainer http={http}/>);
+
+      wrapper.find('select').simulate('change', { target: { value: 10 } });
+
+      expect(wrapper.state('selectedBar')).to.eql(10);
     });
   });
 
@@ -127,38 +185,26 @@ describe('ProgressBarsContainer', () => {
 
   describe('BarSelector', () => {
     it('not render selected bar when progress bar list is empty', () => {
-      const wrapper = shallow(<BarSelector bars={[]}/>);
+      const wrapper = shallow(<BarSelector selectedBar={undefined} bars={[]}/>);
 
       expect(wrapper.find('option')).to.have.length(0);
     });
 
     it('not render selected bar when progress bar list is undefined', () => {
-      const wrapper = shallow(<BarSelector bars={undefined}/>);
+      const wrapper = shallow(<BarSelector selectedBar={undefined} bars={undefined}/>);
 
       expect(wrapper.find('option')).to.have.length(0);
     });
 
-    it('selects the first bar by default', () => {
-      const wrapper = shallow(<BarSelector bars={[30, 44]}/>);
+    it('renders options for each progress bar available', () => {
+      const handleChange = () => {};
+      const wrapper = shallow(<BarSelector selectedBar={1} bars={[1, 10, 5]} handleChange={handleChange}/>);
 
-      expect(wrapper.find('option')).to.have.length(2);
-
-      expect(wrapper.html()).to.contain(`<option selected="" value="30">#progress1</option>`);
-      expect(wrapper.html()).to.contain(`<option value="44">#progress2</option>`);
-    });
-
-    it('handles selection state change', () => {
-      const wrapper = shallow(<BarSelector bars={[1, 2, 3]}/>);
+      expect(wrapper.find('option')).to.have.length(3);
 
       expect(wrapper.html()).to.contain(`<option selected="" value="1">#progress1</option>`);
-      expect(wrapper.html()).to.contain(`<option value="2">#progress2</option>`);
-      expect(wrapper.html()).to.contain(`<option value="3">#progress3</option>`);
-
-      wrapper.find('select').simulate('change', { target: { value: 2 } });
-
-      expect(wrapper.html()).to.contain(`<option value="1">#progress1</option>`);
-      expect(wrapper.html()).to.contain(`<option selected="" value="2">#progress2</option>`);
-      expect(wrapper.html()).to.contain(`<option value="3">#progress3</option>`);
+      expect(wrapper.html()).to.contain(`<option value="10">#progress2</option>`);
+      expect(wrapper.html()).to.contain(`<option value="5">#progress3</option>`);
     });
   });
 
@@ -176,13 +222,16 @@ describe('ProgressBarsContainer', () => {
     });
 
     it('renders number rates appending positive/negative signs', () => {
-      const wrapper = mount(<ButtonList numberRates={[8, -2, 5]}/>);
+      const click = () => {};
+      const wrapper = mount(<ButtonList numberRates={[8, -2, 5]} handleClick={click}/>);
+
+      const onClickFunction = wrapper.instance().handleClick;
 
       expect(wrapper.find('li')).to.have.length(3);
 
-      expect(wrapper.contains(<li><NumberRateButton value={'+8'}></NumberRateButton></li>)).to.equal(true);
-      expect(wrapper.contains(<li><NumberRateButton value={'-2'}></NumberRateButton></li>)).to.equal(true);
-      expect(wrapper.contains(<li><NumberRateButton value={'+5'}></NumberRateButton></li>)).to.equal(true);
+      expect(wrapper.contains(<NumberRateButton value={'+8'} handleClick={onClickFunction}/>)).to.equal(true);
+      expect(wrapper.contains(<NumberRateButton value={'-2'} handleClick={onClickFunction}/>)).to.equal(true);
+      expect(wrapper.contains(<NumberRateButton value={'+5'} handleClick={onClickFunction}/>)).to.equal(true);
     });
   });
 });
