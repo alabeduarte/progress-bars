@@ -1,0 +1,35 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.bar {
+  text-align: center;
+  border: 1px solid red;
+  height: 2em;
+  position: relative;
+}
+
+.progress {
+  background-color: yellow;
+  height: 100%;
+  transition: width 0.5s;
+}
+
+.progressBarLabel {
+  font-family: 'Open Sans';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+ul {
+  padding: 0;
+}
+
+ul li div.bar {
+  list-style: none;
+  margin: 0.4em;
+}

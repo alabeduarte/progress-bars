@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import style from './style.css';
 
 export class ProgressBarsContainer extends Component {
   constructor(props) {
@@ -73,8 +74,17 @@ export class ProgressBarList extends Component {
 
 export class Bar extends Component {
   render() {
-    return (this.props.value && this.props.value >= 0) ?
-      (<label>{this.props.value}%</label>) : (<label>0%</label>)
+    const value = this.props.value;
+    const percentageValue = (value && value >= 0) ? `${value}%` : '0%';
+
+    return (
+      <div className={style.bar}>
+        <div className={style.progress} style={{width: percentageValue}}></div>
+        <div className={style.progressBarLabel}>
+          {percentageValue}
+        </div>
+      </div>
+    )
   }
 }
 
