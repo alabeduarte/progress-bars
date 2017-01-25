@@ -7,7 +7,7 @@ export class ProgressBarsContainer extends Component {
     this.state = {
       bars: [],
       numberRates: [],
-      selectedBar: {}
+      selectedBar: undefined
     }
 
     this.http = this.props.http;
@@ -20,12 +20,12 @@ export class ProgressBarsContainer extends Component {
   }
 
   increase(value) {
-    this.setState({
-      bars: this.state.bars.map( (bar, index) => {
-        return this.state.selectedBar === index ?
+    this.setState( (state) => ({
+      bars: state.bars.map( (bar, index) => {
+        return state.selectedBar === index ?
           Number(bar) + Number(value) : bar;
       }).map( (bar) => Number(bar) > 0 ? bar : 0)
-    });
+    }));
   }
 
   async componentWillMount() {
