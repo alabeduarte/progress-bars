@@ -92,7 +92,7 @@ describe('ProgressBarsContainer', () => {
       expect(wrapper.state('selectedBar')).to.eql(7);
     });
 
-    it('bind increase logic with Number Rate Button component', async () => {
+    it('increases progress bar when number rate button is clicked', async () => {
       const wrapper = await mount(<ProgressBarsContainer http={http}/>);
       wrapper.update();
 
@@ -101,6 +101,18 @@ describe('ProgressBarsContainer', () => {
       wrapper.find('button[value="+2"]').simulate('click');
 
       expect(wrapper.state('bars')).to.eql([3, 10, 5]);
+    });
+
+    it('increases progress bar when number rate button is clicked given another selected bar', async () => {
+      const wrapper = await mount(<ProgressBarsContainer http={http}/>);
+      wrapper.setState({ selectedBar: 5 });
+      wrapper.update();
+
+      expect(wrapper.state('bars')).to.eql([1, 10, 5]);
+
+      wrapper.find('button[value="+2"]').simulate('click');
+
+      expect(wrapper.state('bars')).to.eql([1, 10, 7]);
     });
   });
 
