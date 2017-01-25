@@ -21,11 +21,10 @@ export class ProgressBarsContainer extends Component {
 
   increase(value) {
     this.setState({
-      bars: this.state.bars.map( (bar) => {
-        return bar === this.state.selectedBar ?
+      bars: this.state.bars.map( (bar, index) => {
+        return this.state.selectedBar === index ?
           Number(bar) + Number(value) : bar;
-      }),
-      selectedBar: Number(this.state.selectedBar) + Number(value)
+      })
     });
   }
 
@@ -37,7 +36,7 @@ export class ProgressBarsContainer extends Component {
     this.setState({
       bars: data.bars,
       numberRates: data.buttons,
-      selectedBar: data.bars ? data.bars[0] : ''
+      selectedBar: data.bars ? 0 : undefined
     });
   }
 
@@ -95,7 +94,7 @@ export class BarSelector extends Component {
       (
         <select value={this.props.selectedBar} onChange={this.handleChange}>
           {this.props.bars.map((bar, index) => (
-            <option key={index} value={bar}>#progress{index + 1}</option>
+            <option key={index} value={index}>#progress{index + 1}</option>
           ))}
         </select>
       ) : null

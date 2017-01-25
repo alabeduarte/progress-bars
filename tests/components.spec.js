@@ -39,7 +39,7 @@ describe('ProgressBarsContainer', () => {
 
     expect(wrapper.containsAllMatchingElements([
       <ProgressBarList bars={bars}/>,
-      <BarSelector selectedBar={bars[0]} bars={bars} handleChange={selectedBarChanged}/>,
+      <BarSelector selectedBar={0} bars={bars} handleChange={selectedBarChanged}/>,
       <ButtonList numberRates={numberRates}/>
     ])).to.equal(true);
   });
@@ -69,7 +69,7 @@ describe('ProgressBarsContainer', () => {
 
     it('decreases bar percentage by rate number', async () => {
       const wrapper = await shallow(<ProgressBarsContainer http={http}/>);
-      wrapper.setState({ selectedBar: 10 });
+      wrapper.setState({ selectedBar: 1 });
 
       expect(wrapper.state('bars')).to.eql([1, 10, 5]);
 
@@ -81,7 +81,7 @@ describe('ProgressBarsContainer', () => {
 
     it('updates selected bar after increase', async () => {
       const wrapper = await shallow(<ProgressBarsContainer http={http}/>);
-      wrapper.setState({ selectedBar: 5 });
+      wrapper.setState({ selectedBar: 2 });
 
       expect(wrapper.state('bars')).to.eql([1, 10, 5]);
 
@@ -89,7 +89,7 @@ describe('ProgressBarsContainer', () => {
 
       expect(wrapper.state('bars')).to.eql([1, 10, 7]);
       expect(wrapper.state('numberRates')).to.eql([-3, 2]);
-      expect(wrapper.state('selectedBar')).to.eql(7);
+      expect(wrapper.state('selectedBar')).to.eql(2);
     });
 
     it('increases progress bar when number rate button is clicked', async () => {
@@ -105,7 +105,7 @@ describe('ProgressBarsContainer', () => {
 
     it('increases progress bar when number rate button is clicked given another selected bar', async () => {
       const wrapper = await mount(<ProgressBarsContainer http={http}/>);
-      wrapper.setState({ selectedBar: 5 });
+      wrapper.setState({ selectedBar: 2 });
       wrapper.update();
 
       expect(wrapper.state('bars')).to.eql([1, 10, 5]);
@@ -131,15 +131,15 @@ describe('ProgressBarsContainer', () => {
     it('selects the first bar by default', async () => {
       const wrapper = await mount(<ProgressBarsContainer http={http}/>);
 
-      expect(wrapper.state('selectedBar')).to.eql(1);
+      expect(wrapper.state('selectedBar')).to.eql(0);
     });
 
     it('handles selection state change', async () => {
       const wrapper = await mount(<ProgressBarsContainer http={http}/>);
 
-      wrapper.find('select').simulate('change', { target: { value: 10 } });
+      wrapper.find('select').simulate('change', { target: { value: 1 } });
 
-      expect(wrapper.state('selectedBar')).to.eql(10);
+      expect(wrapper.state('selectedBar')).to.eql(1);
     });
   });
 
@@ -209,13 +209,13 @@ describe('ProgressBarsContainer', () => {
 
     it('renders options for each progress bar available', () => {
       const handleChange = () => {};
-      const wrapper = shallow(<BarSelector selectedBar={1} bars={[1, 10, 5]} handleChange={handleChange}/>);
+      const wrapper = shallow(<BarSelector selectedBar={0} bars={[1, 10, 5]} handleChange={handleChange}/>);
 
       expect(wrapper.find('option')).to.have.length(3);
 
-      expect(wrapper.html()).to.contain(`<option selected="" value="1">#progress1</option>`);
-      expect(wrapper.html()).to.contain(`<option value="10">#progress2</option>`);
-      expect(wrapper.html()).to.contain(`<option value="5">#progress3</option>`);
+      expect(wrapper.html()).to.contain(`<option selected="" value="0">#progress1</option>`);
+      expect(wrapper.html()).to.contain(`<option value="1">#progress2</option>`);
+      expect(wrapper.html()).to.contain(`<option value="2">#progress3</option>`);
     });
   });
 
