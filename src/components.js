@@ -75,13 +75,14 @@ export class ProgressBarList extends Component {
 export class Bar extends Component {
   render() {
     const value = this.props.value;
-    const percentageValue = (value && value >= 0) ? `${value}%` : '0%';
+    const percentageValue = (value && value >= 0) ? Number(value) : 0;
+    const percentageWidth = percentageValue > 100 ? '100%' : `${percentageValue}%`;
 
     return (
       <div className={style.bar}>
-        <div className={style.progress} style={{width: percentageValue}}></div>
+        <div className={style.progress} style={{width: percentageWidth}}></div>
         <div className={style.progressBarLabel}>
-          {percentageValue}
+          {percentageValue}%
         </div>
       </div>
     )
@@ -125,11 +126,13 @@ export class ButtonList extends Component {
   render() {
     return this.props.numberRates ?
       (
-        <ul>
+        <ul className={style.controls}>
           {this.props.numberRates.map( (numberRate) => {
             return numberRate > 0 ? `+${numberRate}` : numberRate.toString();
           }).map( (numberRate, index) => (
-            <li key={index}><NumberRateButton value={numberRate} handleClick={this.handleClick}/></li>
+            <li key={index}>
+              <NumberRateButton value={numberRate} handleClick={this.handleClick}/>
+            </li>
           ))}
         </ul>
       ) : null
