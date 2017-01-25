@@ -79,6 +79,18 @@ describe('ProgressBarsContainer', () => {
       expect(wrapper.state('numberRates')).to.eql([-3, 2]);
     });
 
+    it('does not allow progress bar value be less than 0%', async () => {
+      const wrapper = await shallow(<ProgressBarsContainer http={http}/>);
+      wrapper.setState({ selectedBar: 0 });
+
+      expect(wrapper.state('bars')).to.eql([1, 10, 5]);
+
+      wrapper.instance().increase(-3);
+
+      expect(wrapper.state('bars')).to.eql([0, 10, 5]);
+      expect(wrapper.state('numberRates')).to.eql([-3, 2]);
+    });
+
     it('updates selected bar after increase', async () => {
       const wrapper = await shallow(<ProgressBarsContainer http={http}/>);
       wrapper.setState({ selectedBar: 2 });

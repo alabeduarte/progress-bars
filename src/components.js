@@ -24,7 +24,7 @@ export class ProgressBarsContainer extends Component {
       bars: this.state.bars.map( (bar, index) => {
         return this.state.selectedBar === index ?
           Number(bar) + Number(value) : bar;
-      })
+      }).map( (bar) => Number(bar) > 0 ? bar : 0)
     });
   }
 
