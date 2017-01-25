@@ -22,7 +22,7 @@ export class ProgressBarsContainer extends Component {
   increase(value) {
     this.setState( (state) => ({
       bars: state.bars.map( (bar, index) => {
-        return state.selectedBar === index ?
+        return Number(state.selectedBar) === Number(index) ?
           Number(bar) + Number(value) : bar;
       }).map( (bar) => Number(bar) > 0 ? bar : 0)
     }));

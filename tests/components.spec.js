@@ -91,7 +91,19 @@ describe('ProgressBarsContainer', () => {
       expect(wrapper.state('numberRates')).to.eql([-3, 2]);
     });
 
-    it('updates selected bar after increase', async () => {
+    it('handles increasing logic when selected bar is in a sring format', async () => {
+      const wrapper = await shallow(<ProgressBarsContainer http={http}/>);
+      wrapper.setState({ selectedBar: '1' });
+
+      expect(wrapper.state('bars')).to.eql([1, 10, 5]);
+
+      wrapper.instance().increase(-3);
+
+      expect(wrapper.state('bars')).to.eql([1, 7, 5]);
+      expect(wrapper.state('numberRates')).to.eql([-3, 2]);
+    });
+
+    it('keeps selected bar after increase', async () => {
       const wrapper = await shallow(<ProgressBarsContainer http={http}/>);
       wrapper.setState({ selectedBar: 2 });
 
