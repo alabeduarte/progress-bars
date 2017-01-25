@@ -25,11 +25,16 @@ describe('ProgressBarsContainer', () => {
   it('fetches data endpoint', async () => {
     const bars = [1, 2];
     const numberRates = [5, 6, 7];
+    const limit = 55;
 
     const http = {
       get: (uri) => {
         return Promise.resolve({
-          data: { bars: bars, buttons: numberRates }
+          data: {
+            bars: bars,
+            buttons: numberRates,
+            limit: limit
+          }
         });
       }
     };
@@ -38,7 +43,7 @@ describe('ProgressBarsContainer', () => {
     const selectedBarChanged = wrapper.instance().selectedBarChanged;
 
     expect(wrapper.containsAllMatchingElements([
-      <ProgressBarList bars={bars}/>,
+      <ProgressBarList bars={bars} limit={limit}/>,
       <BarSelector selectedBar={0} bars={bars} handleChange={selectedBarChanged}/>,
       <ButtonList numberRates={numberRates}/>
     ])).to.equal(true);
@@ -51,7 +56,10 @@ describe('ProgressBarsContainer', () => {
     const http = {
       get: (uri) => {
         return Promise.resolve({
-          data: { bars: bars, buttons: numberRates }
+          data: {
+            bars: bars,
+            buttons: numberRates
+          }
         });
       }
     };
@@ -189,12 +197,12 @@ describe('ProgressBarsContainer', () => {
     });
 
     it('renders all given progress bars', () => {
-      const wrapper = shallow(<ProgressBarList bars={[62, 45]}/>);
+      const wrapper = shallow(<ProgressBarList bars={[62, 45]} limit={50}/>);
 
       expect(wrapper.find('li')).to.have.length(2);
 
-      expect(wrapper.contains(<li><Bar value={62}/></li>)).to.equal(true);
-      expect(wrapper.contains(<li><Bar value={45}/></li>)).to.equal(true);
+      expect(wrapper.contains(<li><Bar value={62} limit={50}/></li>)).to.equal(true);
+      expect(wrapper.contains(<li><Bar value={45} limit={50}/></li>)).to.equal(true);
     });
 
     describe('Bar', () => {

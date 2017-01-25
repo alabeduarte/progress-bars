@@ -37,6 +37,7 @@ export class ProgressBarsContainer extends Component {
     this.setState({
       bars: data.bars,
       numberRates: data.buttons,
+      limit: data.limit ? Number(data.limit) : 100,
       selectedBar: data.bars ? 0 : undefined
     });
   }
@@ -45,7 +46,7 @@ export class ProgressBarsContainer extends Component {
     return (
       <div>
         <Title/>
-        <ProgressBarList bars={this.state.bars}/>
+        <ProgressBarList bars={this.state.bars} limit={this.state.limit}/>
         <BarSelector selectedBar={this.state.selectedBar} bars={this.state.bars} handleChange={this.selectedBarChanged}/>
         <ButtonList numberRates={this.state.numberRates} handleClick={this.increase}/>
       </div>
@@ -65,7 +66,7 @@ export class ProgressBarList extends Component {
       (
         <ul>
           {this.props.bars.map( (bar, index) => (
-            <li key={index}><Bar value={bar}/></li>
+            <li key={index}><Bar value={bar} limit={this.props.limit}/></li>
           ))}
         </ul>
       ) : null
@@ -73,16 +74,25 @@ export class ProgressBarList extends Component {
 }
 
 export class Bar extends Component {
-  render() {
+  get percentageValue() {
     const value = this.props.value;
-    const percentageValue = (value && value >= 0) ? Number(value) : 0;
-    const percentageWidth = percentageValue > 100 ? '100%' : `${percentageValue}%`;
+
+    return (value && value >= 0) ? Number(value) : 0;
+  }
+
+  get percentageWidth() {
+    return this.percentageValue > 100 ? '100%' : `${this.percentageValue}%`
+  }
+
+  render() {
+    const classNames = this.percentageValue > this.props.limit ?
+      [style.progress, style.beyondLimit] : [style.progress];
 
     return (
       <div className={style.bar}>
-        <div className={style.progress} style={{width: percentageWidth}}></div>
+        <div className={classNames.join(' ')} style={{width: this.percentageWidth}}></div>
         <div className={style.progressBarLabel}>
-          {percentageValue}%
+          {this.percentageValue}%
         </div>
       </div>
     )

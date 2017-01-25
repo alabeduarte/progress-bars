@@ -7,15 +7,19 @@ body {
 
 .bar {
   text-align: center;
-  border: 1px solid red;
-  height: 2em;
+  border: 1px solid #DBDBDB;
+  height: 2.8em;
   position: relative;
 }
 
 .progress {
-  background-color: yellow;
+  background-color: #BCFDFD;
   height: 100%;
   transition: width 0.5s;
+}
+
+.beyondLimit {
+  background-color: red;
 }
 
 .progressBarLabel {
