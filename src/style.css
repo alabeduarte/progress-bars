@@ -10,6 +10,8 @@ body {
   border: 1px solid #DBDBDB;
   height: 2.8em;
   position: relative;
+  margin-left: 3.5em;
+  margin-right: 3.5em;
 }
 
 .progress {
@@ -36,7 +38,6 @@ ul {
 
 ul li div.bar {
   list-style: none;
-  margin: 0.4em;
 }
 
 ul.controls li {

@@ -45,6 +45,7 @@ export class ProgressBarsContainer extends Component {
   render() {
     return (
       <div>
+        Limit: {this.state.limit}%
         <Title/>
         <ProgressBarList bars={this.state.bars} limit={this.state.limit}/>
         <BarSelector selectedBar={this.state.selectedBar} bars={this.state.bars} handleChange={this.selectedBarChanged}/>
@@ -74,23 +75,32 @@ export class ProgressBarList extends Component {
 }
 
 export class Bar extends Component {
+  get limit() {
+    return Number(this.props.limit);
+  }
+
   get percentageValue() {
     const value = this.props.value;
 
     return (value && value >= 0) ? Number(value) : 0;
   }
 
+  get relativePercentValue() {
+    return this.percentageValue > this.limit ?
+      this.limit : this.percentageValue;
+  }
+
   get percentageWidth() {
-    return this.percentageValue > 100 ? '100%' : `${this.percentageValue}%`
+    return (this.relativePercentValue/this.limit)*100;
   }
 
   render() {
-    const classNames = this.percentageValue > this.props.limit ?
+    const classNames = this.percentageValue > this.limit ?
       [style.progress, style.beyondLimit] : [style.progress];
 
     return (
       <div className={style.bar}>
-        <div className={classNames.join(' ')} style={{width: this.percentageWidth}}></div>
+        <div className={classNames.join(' ')} style={{width: `${this.percentageWidth}%`}}></div>
         <div className={style.progressBarLabel}>
           {this.percentageValue}%
         </div>
