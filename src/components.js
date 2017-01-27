@@ -33,11 +33,13 @@ export class ProgressBarsContainer extends Component {
     const baseUrl = 'http://frontend-exercise.apps.staging.digital.gov.au';
     const response = await this.http.get(`${baseUrl}/bars`);
     const data = response.data
+    const limit = data.limit ? Number(data.limit) : 100;
 
     this.setState({
-      bars: data.bars,
+      bars: data.bars.map( (bar) => {
+        return Math.round((bar * 100)/limit);
+      }),
       numberRates: data.buttons,
-      limit: data.limit ? Number(data.limit) : 100,
       selectedBar: data.bars ? 0 : undefined
     });
   }
@@ -45,9 +47,8 @@ export class ProgressBarsContainer extends Component {
   render() {
     return (
       <div>
-        Limit: {this.state.limit}%
         <Title/>
-        <ProgressBarList bars={this.state.bars} limit={this.state.limit}/>
+        <ProgressBarList bars={this.state.bars}/>
         <BarSelector selectedBar={this.state.selectedBar} bars={this.state.bars} handleChange={this.selectedBarChanged}/>
         <ButtonList numberRates={this.state.numberRates} handleClick={this.increase}/>
       </div>
@@ -67,7 +68,7 @@ export class ProgressBarList extends Component {
       (
         <ul>
           {this.props.bars.map( (bar, index) => (
-            <li key={index}><Bar value={bar} limit={this.props.limit}/></li>
+            <li key={index}><Bar value={bar}/></li>
           ))}
         </ul>
       ) : null
@@ -75,32 +76,30 @@ export class ProgressBarList extends Component {
 }
 
 export class Bar extends Component {
-  get limit() {
-    return Number(this.props.limit);
-  }
-
   get percentageValue() {
     const value = this.props.value;
 
     return (value && value >= 0) ? Number(value) : 0;
   }
 
-  get relativePercentValue() {
-    return this.percentageValue > this.limit ?
-      this.limit : this.percentageValue;
+  isGreaterThanHundredPercent() {
+    return this.percentageValue >= 100;
   }
 
   get percentageWidth() {
-    return (this.relativePercentValue/this.limit)*100;
+    const width = this.isGreaterThanHundredPercent() ?
+      100 : this.percentageValue;
+
+    return `${width}%`;
   }
 
   render() {
-    const classNames = this.percentageValue > this.limit ?
+    const classNames = this.isGreaterThanHundredPercent() ?
       [style.progress, style.beyondLimit] : [style.progress];
 
     return (
       <div className={style.bar}>
-        <div className={classNames.join(' ')} style={{width: `${this.percentageWidth}%`}}></div>
+        <div className={classNames.join(' ')} style={{width: this.percentageWidth}}></div>
         <div className={style.progressBarLabel}>
           {this.percentageValue}%
         </div>

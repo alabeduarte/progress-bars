@@ -23,9 +23,9 @@ describe('ProgressBarsContainer', () => {
   });
 
   it('fetches data endpoint', async () => {
-    const bars = [1, 2];
-    const numberRates = [5, 6, 7];
-    const limit = 55;
+    const bars = [10, 30, 90];
+    const numberRates = [10, 20];
+    const limit = 230;
 
     const http = {
       get: (uri) => {
@@ -40,13 +40,36 @@ describe('ProgressBarsContainer', () => {
     };
 
     const wrapper = await shallow(<ProgressBarsContainer http={http}/>);
+    const postCalculatedBarsBasedOnLimit = [4, 13, 39];
     const selectedBarChanged = wrapper.instance().selectedBarChanged;
 
     expect(wrapper.containsAllMatchingElements([
-      <ProgressBarList bars={bars} limit={limit}/>,
-      <BarSelector selectedBar={0} bars={bars} handleChange={selectedBarChanged}/>,
+      <ProgressBarList bars={postCalculatedBarsBasedOnLimit}/>,
+      <BarSelector selectedBar={0} bars={postCalculatedBarsBasedOnLimit} handleChange={selectedBarChanged}/>,
       <ButtonList numberRates={numberRates}/>
     ])).to.equal(true);
+  });
+
+  it('recalculates bar values according to the limit', async () => {
+    const bars = [10, 30, 90];
+    const numberRates = [10, 20];
+    const limit = 230;
+
+    const http = {
+      get: (uri) => {
+        return Promise.resolve({
+          data: {
+            bars: bars,
+            buttons: numberRates,
+            limit: limit
+          }
+        });
+      }
+    };
+
+    const wrapper = await shallow(<ProgressBarsContainer http={http}/>);
+
+    expect(wrapper.state('bars')).to.eql([4, 13, 39])
   });
 
   describe('Increasing/Decreasing progress bars', () => {
@@ -197,12 +220,12 @@ describe('ProgressBarsContainer', () => {
     });
 
     it('renders all given progress bars', () => {
-      const wrapper = shallow(<ProgressBarList bars={[62, 45]} limit={50}/>);
+      const wrapper = shallow(<ProgressBarList bars={[62, 45]}/>);
 
       expect(wrapper.find('li')).to.have.length(2);
 
-      expect(wrapper.contains(<li><Bar value={62} limit={50}/></li>)).to.equal(true);
-      expect(wrapper.contains(<li><Bar value={45} limit={50}/></li>)).to.equal(true);
+      expect(wrapper.contains(<li><Bar value={62}/></li>)).to.equal(true);
+      expect(wrapper.contains(<li><Bar value={45}/></li>)).to.equal(true);
     });
 
     describe('Bar', () => {
@@ -222,6 +245,18 @@ describe('ProgressBarsContainer', () => {
         const wrapper = shallow(<Bar value={-1}/>);
 
         expect(wrapper.text()).to.contain('0%');
+      });
+
+      it('renders percentual width representation when it is below 100%', () => {
+        const wrapper = shallow(<Bar value={25}/>);
+
+        expect(wrapper.instance().percentageWidth).to.eql('25%');
+      });
+
+      it('keeps percentual width as 100% when value is beyond 100%', () => {
+        const wrapper = shallow(<Bar value={101}/>);
+
+        expect(wrapper.instance().percentageWidth).to.eql('100%');
       });
     });
   });
