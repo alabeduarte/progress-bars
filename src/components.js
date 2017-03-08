@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import style from './style.css';
+import axios from 'axios';
 
 export class ProgressBarsContainer extends Component {
   constructor(props) {
@@ -11,7 +12,6 @@ export class ProgressBarsContainer extends Component {
       selectedBar: undefined
     }
 
-    this.http = this.props.http;
     this.increase = this.increase.bind(this);
     this.selectedBarChanged = this.selectedBarChanged.bind(this);
   }
@@ -31,8 +31,8 @@ export class ProgressBarsContainer extends Component {
 
   async componentWillMount() {
     const baseUrl = 'http://frontend-exercise.apps.staging.digital.gov.au';
-    const response = await this.http.get(`${baseUrl}/bars`);
-    const data = response.data
+    const response = await axios.get(`${baseUrl}/bars`);
+    const data = response.data;
     const limit = data.limit ? Number(data.limit) : 100;
 
     this.setState({

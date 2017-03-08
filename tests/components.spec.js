@@ -1,18 +1,20 @@
 import React from 'react';
 import { expect } from 'chai';
 import { shallow, mount } from 'enzyme';
+import sinon from 'sinon';
+import axios from 'axios';
 
 import { ProgressBarsContainer, Title, ProgressBarList, Bar, BarSelector, ButtonList, NumberRateButton } from '../src/components';
 
-describe('ProgressBarsContainer', () => {
-  it('renders components', () => {
-    const http = {
-      get: (uri) => {
-        return { data: {} }
-      }
-    };
 
-    const wrapper = shallow(<ProgressBarsContainer http={http}/>);
+describe('ProgressBarsContainer', () => {
+
+  sinon.stub(axios, 'get');
+
+  it('renders components', () => {
+    axios.get.returns(Promise.resolve({ data: {} }));
+
+    const wrapper = shallow(<ProgressBarsContainer/>);
 
     expect(wrapper.containsAllMatchingElements([
       <Title/>,
@@ -26,20 +28,15 @@ describe('ProgressBarsContainer', () => {
     const bars = [10, 30, 90];
     const numberRates = [10, 20];
     const limit = 230;
-
-    const http = {
-      get: (uri) => {
-        return Promise.resolve({
-          data: {
-            bars: bars,
-            buttons: numberRates,
-            limit: limit
-          }
-        });
+    axios.get.returns(Promise.resolve({
+      data: {
+        bars: bars,
+        buttons: numberRates,
+        limit: limit
       }
-    };
+    }));
 
-    const wrapper = await shallow(<ProgressBarsContainer http={http}/>);
+    const wrapper = await shallow(<ProgressBarsContainer/>);
     const postCalculatedBarsBasedOnLimit = [4, 13, 39];
     const selectedBarChanged = wrapper.instance().selectedBarChanged;
 
@@ -55,19 +52,15 @@ describe('ProgressBarsContainer', () => {
     const numberRates = [10, 20];
     const limit = 230;
 
-    const http = {
-      get: (uri) => {
-        return Promise.resolve({
-          data: {
-            bars: bars,
-            buttons: numberRates,
-            limit: limit
-          }
-        });
+    axios.get.returns(Promise.resolve({
+      data: {
+        bars: bars,
+        buttons: numberRates,
+        limit: limit
       }
-    };
+    }));
 
-    const wrapper = await shallow(<ProgressBarsContainer http={http}/>);
+    const wrapper = await shallow(<ProgressBarsContainer/>);
 
     expect(wrapper.state('bars')).to.eql([4, 13, 39])
   });
@@ -76,19 +69,17 @@ describe('ProgressBarsContainer', () => {
     const bars = [1, 10, 5];
     const numberRates = [-3, 2];
 
-    const http = {
-      get: (uri) => {
-        return Promise.resolve({
-          data: {
-            bars: bars,
-            buttons: numberRates
-          }
-        });
-      }
-    };
+    before(() => {
+      axios.get.returns(Promise.resolve({
+        data: {
+          bars: bars,
+          buttons: numberRates
+        }
+      }));
+    });
 
     it('increases bar percentage by rate number', async () => {
-      const wrapper = await shallow(<ProgressBarsContainer http={http}/>);
+      const wrapper = await shallow(<ProgressBarsContainer/>);
 
       expect(wrapper.state('bars')).to.eql([1, 10, 5]);
 
@@ -99,7 +90,7 @@ describe('ProgressBarsContainer', () => {
     });
 
     it('decreases bar percentage by rate number', async () => {
-      const wrapper = await shallow(<ProgressBarsContainer http={http}/>);
+      const wrapper = await shallow(<ProgressBarsContainer/>);
       wrapper.setState({ selectedBar: 1 });
 
       expect(wrapper.state('bars')).to.eql([1, 10, 5]);
@@ -111,7 +102,7 @@ describe('ProgressBarsContainer', () => {
     });
 
     it('does not allow progress bar value be less than 0%', async () => {
-      const wrapper = await shallow(<ProgressBarsContainer http={http}/>);
+      const wrapper = await shallow(<ProgressBarsContainer/>);
       wrapper.setState({ selectedBar: 0 });
 
       expect(wrapper.state('bars')).to.eql([1, 10, 5]);
@@ -123,7 +114,7 @@ describe('ProgressBarsContainer', () => {
     });
 
     it('handles increasing logic when selected bar is in a sring format', async () => {
-      const wrapper = await shallow(<ProgressBarsContainer http={http}/>);
+      const wrapper = await shallow(<ProgressBarsContainer/>);
       wrapper.setState({ selectedBar: '1' });
 
       expect(wrapper.state('bars')).to.eql([1, 10, 5]);
@@ -135,7 +126,7 @@ describe('ProgressBarsContainer', () => {
     });
 
     it('keeps selected bar after increase', async () => {
-      const wrapper = await shallow(<ProgressBarsContainer http={http}/>);
+      const wrapper = await shallow(<ProgressBarsContainer/>);
       wrapper.setState({ selectedBar: 2 });
 
       expect(wrapper.state('bars')).to.eql([1, 10, 5]);
@@ -148,7 +139,7 @@ describe('ProgressBarsContainer', () => {
     });
 
     it('increases progress bar when number rate button is clicked', async () => {
-      const wrapper = await mount(<ProgressBarsContainer http={http}/>);
+      const wrapper = await mount(<ProgressBarsContainer/>);
       wrapper.update();
 
       expect(wrapper.state('bars')).to.eql([1, 10, 5]);
@@ -159,7 +150,7 @@ describe('ProgressBarsContainer', () => {
     });
 
     it('increases progress bar when number rate button is clicked given another selected bar', async () => {
-      const wrapper = await mount(<ProgressBarsContainer http={http}/>);
+      const wrapper = await mount(<ProgressBarsContainer/>);
       wrapper.setState({ selectedBar: 2 });
       wrapper.update();
 
@@ -175,22 +166,18 @@ describe('ProgressBarsContainer', () => {
     const bars = [1, 10, 5];
     const numberRates = [-3, 2];
 
-    const http = {
-      get: (uri) => {
-        return Promise.resolve({
-          data: { bars: bars, buttons: numberRates }
-        });
-      }
-    };
+    axios.get.returns(Promise.resolve({
+      data: { bars: bars, buttons: numberRates }
+    }));
 
     it('selects the first bar by default', async () => {
-      const wrapper = await mount(<ProgressBarsContainer http={http}/>);
+      const wrapper = await mount(<ProgressBarsContainer/>);
 
       expect(wrapper.state('selectedBar')).to.eql(0);
     });
 
     it('handles selection state change', async () => {
-      const wrapper = await mount(<ProgressBarsContainer http={http}/>);
+      const wrapper = await mount(<ProgressBarsContainer/>);
 
       wrapper.find('select').simulate('change', { target: { value: 1 } });
 
