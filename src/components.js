@@ -14,7 +14,7 @@ export class ProgressBarsContainer extends Component {
     this.state = {
       bars: [],
       numberRates: [],
-      selectedBar: undefined
+      selectedBar: 0
     }
 
     this.updateProgressBarValue = this.updateProgressBarValue.bind(this);
