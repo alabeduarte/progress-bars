@@ -50,6 +50,10 @@ export class ProgressBarsContainer extends Component {
     });
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.state.bars.toString() !== nextState.bars.toString();
+  }
+
   render() {
     return (
       <div>
@@ -63,12 +67,22 @@ export class ProgressBarsContainer extends Component {
 }
 
 export class Title extends Component {
+
+  shouldComponentUpdate() {
+    return false;
+  }
+
   render() {
     return (<h1>Progress Bars</h1>)
   }
 }
 
 export class ProgressBarList extends Component {
+
+  shouldComponentUpdate(nextProps) {
+    return this.props.bars.toString() !== nextProps.bars.toString();
+  }
+
   render() {
     return this.props.bars ?
       (
@@ -118,6 +132,11 @@ export class BarSelector extends Component {
     this.props.handleChange(event.target.value);
   }
 
+  shouldComponentUpdate(nextProps) {
+    return this.props.selectedBar !== nextProps.selectedBar ||
+          this.props.bars.toString() !== nextProps.bars.toString();
+  }
+
   render() {
     return this.props.bars ?
       (
@@ -141,6 +160,10 @@ export class ButtonList extends Component {
     this.props.handleClick(event.target.value);
   }
 
+  shouldComponentUpdate(nextProps) {
+    return this.props.numberRates.toString() !== nextProps.numberRates.toString();
+  }
+
   render() {
     return this.props.numberRates ?
       (
@@ -158,6 +181,11 @@ export class ButtonList extends Component {
 }
 
 export class NumberRateButton extends Component {
+
+  shouldComponentUpdate(nextProps) {
+    return this.props.value !== nextProps.value;
+  }
+
   render() {
     return (
       <button value={this.props.value} onClick={this.props.handleClick}>{this.props.value}</button>
