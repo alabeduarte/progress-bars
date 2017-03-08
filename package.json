@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "quik",
-    "test": "mocha tests/*.spec.js --require ./tests/setup.js --require ./tests/cssNullCompiler.js"
+    "test": "nyc --reporter=lcov --reporter=text-summary mocha tests/*.spec.js --require ./tests/setup.js --require ./tests/cssNullCompiler.js"
   },
   "author": "Alabê Duarte",
   "license": "ISC",
@@ -24,6 +24,7 @@
     "enzyme": "^2.7.0",
     "jsdom": "^9.9.1",
     "mocha": "^3.2.0",
+    "nyc": "^10.1.2",
     "react-addons-test-utils": "^15.4.2",
     "sinon": "^1.17.7"
   }
