@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import style from './style.css';
 import axios from 'axios';
 
+const ONE_HUNDRED = 100;
+const MINUMUM_VALUE = 0;
+
+const isGreaterThanHundredPercent = (percentageValue) => percentageValue >= ONE_HUNDRED;
+
 export class ProgressBarsContainer extends Component {
   constructor(props) {
     super(props);
@@ -77,24 +82,17 @@ export class ProgressBarList extends Component {
 
 export class Bar extends Component {
   get percentageValue() {
-    const value = this.props.value;
-
-    return (value && value >= 0) ? Number(value) : 0;
-  }
-
-  isGreaterThanHundredPercent() {
-    return this.percentageValue >= 100;
+    return Math.max(MINUMUM_VALUE, this.props.value || MINUMUM_VALUE);
   }
 
   get percentageWidth() {
-    const width = this.isGreaterThanHundredPercent() ?
-      100 : this.percentageValue;
-
+    const width = isGreaterThanHundredPercent(this.percentageValue) ?
+    ONE_HUNDRED : this.percentageValue;
     return `${width}%`;
   }
 
   render() {
-    const classNames = this.isGreaterThanHundredPercent() ?
+    const classNames = isGreaterThanHundredPercent(this.percentageValue) ?
       [style.progress, style.beyondLimit] : [style.progress];
 
     return (
@@ -142,12 +140,16 @@ export class ButtonList extends Component {
     this.props.handleClick(event.target.value);
   }
 
+  shouldComponentUpdate(nextProps) {
+    return this.props.numberRates.toString() !== nextProps.numberRates.toString();
+  }
+
   render() {
     return this.props.numberRates ?
       (
         <ul className={style.controls}>
           {this.props.numberRates.map( (numberRate) => {
-            return numberRate > 0 ? `+${numberRate}` : numberRate.toString();
+            return numberRate > MINUMUM_VALUE ? `+${numberRate}` : numberRate.toString();
           }).map( (numberRate, index) => (
             <li key={index}>
               <NumberRateButton value={numberRate} handleClick={this.handleClick}/>
