@@ -17,7 +17,7 @@ export class ProgressBarsContainer extends Component {
       selectedBar: undefined
     }
 
-    this.increase = this.increase.bind(this);
+    this.updateProgressBarValue = this.updateProgressBarValue.bind(this);
     this.selectedBarChanged = this.selectedBarChanged.bind(this);
   }
 
@@ -25,27 +25,28 @@ export class ProgressBarsContainer extends Component {
     this.setState({ selectedBar: selectedBar });
   }
 
-  increase(value) {
-    this.setState( (state = {bars: []}) => ({
-      bars: state.bars.map( (bar, index) => {
-        return Number(state.selectedBar) === Number(index) ?
-          Number(bar) + Number(value) : bar;
-      }).map( (bar) => Number(bar) > 0 ? bar : 0)
+  updateProgressBarValue(value) {
+    value = Number(value);
+    this.setState( (state) => ({
+      bars: state.bars.map(bar => Number(bar))
+      .map( (bar, index) => {
+        const currentBarValue =  Number(state.selectedBar) === index ?
+          bar + value : bar;
+        return Math.max(MINUMUM_VALUE, currentBarValue);
+      })
     }));
   }
 
   async componentWillMount() {
     const baseUrl = 'http://frontend-exercise.apps.staging.digital.gov.au';
     const response = await axios.get(`${baseUrl}/bars`);
-    const data = response.data;
-    const limit = data.limit ? Number(data.limit) : 100;
+    const defaultResponseValues = { bars: [], limit: ONE_HUNDRED, buttons: [] };
+    const { bars, limit, buttons } = Object.assign(defaultResponseValues, response.data);
 
     this.setState({
-      bars: (data.bars || []).map( (bar) => {
-        return Math.round((bar * 100)/limit);
-      }),
-      numberRates: data.buttons,
-      selectedBar: data.bars ? 0 : undefined
+      bars: bars.map(bar => Math.round((bar * ONE_HUNDRED)/limit)),
+      numberRates: buttons,
+      selectedBar: MINUMUM_VALUE
     });
   }
 
@@ -55,7 +56,7 @@ export class ProgressBarsContainer extends Component {
         <Title/>
         <ProgressBarList bars={this.state.bars}/>
         <BarSelector selectedBar={this.state.selectedBar} bars={this.state.bars} handleChange={this.selectedBarChanged}/>
-        <ButtonList numberRates={this.state.numberRates} handleClick={this.increase}/>
+        <ButtonList numberRates={this.state.numberRates} handleClick={this.updateProgressBarValue}/>
       </div>
     )
   }
@@ -138,10 +139,6 @@ export class ButtonList extends Component {
 
   handleClick(event) {
     this.props.handleClick(event.target.value);
-  }
-
-  shouldComponentUpdate(nextProps) {
-    return this.props.numberRates.toString() !== nextProps.numberRates.toString();
   }
 
   render() {

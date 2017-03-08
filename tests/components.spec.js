@@ -83,7 +83,7 @@ describe('ProgressBarsContainer', () => {
 
       expect(wrapper.state('bars')).to.eql([1, 10, 5]);
 
-      wrapper.instance().increase(2) ;
+      wrapper.instance().updateProgressBarValue(2) ;
 
       expect(wrapper.state('bars')).to.eql([3, 10, 5]);
       expect(wrapper.state('numberRates')).to.eql([-3, 2]);
@@ -95,7 +95,7 @@ describe('ProgressBarsContainer', () => {
 
       expect(wrapper.state('bars')).to.eql([1, 10, 5]);
 
-      wrapper.instance().increase(-3);
+      wrapper.instance().updateProgressBarValue(-3);
 
       expect(wrapper.state('bars')).to.eql([1, 7, 5]);
       expect(wrapper.state('numberRates')).to.eql([-3, 2]);
@@ -107,7 +107,7 @@ describe('ProgressBarsContainer', () => {
 
       expect(wrapper.state('bars')).to.eql([1, 10, 5]);
 
-      wrapper.instance().increase(-3);
+      wrapper.instance().updateProgressBarValue(-3);
 
       expect(wrapper.state('bars')).to.eql([0, 10, 5]);
       expect(wrapper.state('numberRates')).to.eql([-3, 2]);
@@ -119,7 +119,7 @@ describe('ProgressBarsContainer', () => {
 
       expect(wrapper.state('bars')).to.eql([1, 10, 5]);
 
-      wrapper.instance().increase(-3);
+      wrapper.instance().updateProgressBarValue(-3);
 
       expect(wrapper.state('bars')).to.eql([1, 7, 5]);
       expect(wrapper.state('numberRates')).to.eql([-3, 2]);
@@ -131,7 +131,7 @@ describe('ProgressBarsContainer', () => {
 
       expect(wrapper.state('bars')).to.eql([1, 10, 5]);
 
-      wrapper.instance().increase(2);
+      wrapper.instance().updateProgressBarValue(2);
 
       expect(wrapper.state('bars')).to.eql([1, 10, 7]);
       expect(wrapper.state('numberRates')).to.eql([-3, 2]);
