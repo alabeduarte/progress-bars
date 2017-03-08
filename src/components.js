@@ -21,7 +21,7 @@ export class ProgressBarsContainer extends Component {
   }
 
   increase(value) {
-    this.setState( (state) => ({
+    this.setState( (state = {bars: []}) => ({
       bars: state.bars.map( (bar, index) => {
         return Number(state.selectedBar) === Number(index) ?
           Number(bar) + Number(value) : bar;
@@ -36,7 +36,7 @@ export class ProgressBarsContainer extends Component {
     const limit = data.limit ? Number(data.limit) : 100;
 
     this.setState({
-      bars: data.bars.map( (bar) => {
+      bars: (data.bars || []).map( (bar) => {
         return Math.round((bar * 100)/limit);
       }),
       numberRates: data.buttons,
