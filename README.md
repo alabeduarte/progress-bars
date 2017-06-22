@@ -35,9 +35,9 @@ Code challenge to practice React.
 }
 ```
 
-<center>
+<p align="center">
   <img width="682" alt="multiple progress bars with: 24%, 31%, 42% and 57%; selected progress bar; buttons to increment/decrement values with: +31, +45, -46, -12" src="https://user-images.githubusercontent.com/418269/27411815-9d10dfea-5733-11e7-8a4a-42ffebc67fab.png">
-</center>
+</p>
 
 ## Install
 
