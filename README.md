@@ -1,5 +1,8 @@
 # progress-bar
 
+[![license](https://img.shields.io/github/license/alabeduarte/progress-bars.svg)](https://spdx.org/licenses/MIT)
+[![travis build](https://img.shields.io/travis/alabeduarte/progress-bars.svg)](https://travis-ci.org/alabeduarte/progress-bars)
+
 Code challenge to practice React.
 
 ## Requirements
@@ -11,7 +14,7 @@ Code challenge to practice React.
 
 ### Example structure from the endpoint:
 
-```json
+```
 {
   "buttons": [
     // The amount of buttons to display and what value they increment or
@@ -54,3 +57,7 @@ The application will be available at http://localhost:3030
 ```
 $ npm start
 ```
+
+### License
+
+MIT
