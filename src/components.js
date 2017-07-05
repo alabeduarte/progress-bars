@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import style from './style.css';
 import axios from 'axios';
+
+import style from './style.css';
+import ButtonList from './ButtonList';
 
 const ONE_HUNDRED = 100;
 const MINUMUM_VALUE = 0;
@@ -146,49 +148,5 @@ export class BarSelector extends Component {
           ))}
         </select>
       ) : null
-  }
-}
-
-export class ButtonList extends Component {
-  constructor(props) {
-    super(props);
-
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  handleClick(event) {
-    this.props.handleClick(event.target.value);
-  }
-
-  shouldComponentUpdate(nextProps) {
-    return this.props.numberRates.toString() !== nextProps.numberRates.toString();
-  }
-
-  render() {
-    return this.props.numberRates ?
-      (
-        <ul className={style.controls}>
-          {this.props.numberRates.map( (numberRate) => {
-            return numberRate > MINUMUM_VALUE ? `+${numberRate}` : numberRate.toString();
-          }).map( (numberRate, index) => (
-            <li key={index}>
-              <NumberRateButton value={numberRate} handleClick={this.handleClick}/>
-            </li>
-          ))}
-        </ul>
-      ) : null
-  }
-}
-
-export class NumberRateButton extends Component {
-
-  shouldComponentUpdate(nextProps) {
-    return this.props.value !== nextProps.value;
-  }
-
-  render() {
-    return (
-      <button value={this.props.value} onClick={this.props.handleClick}>{this.props.value}</button>
-    )
   }
 }

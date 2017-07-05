@@ -4,7 +4,9 @@ import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
 import axios from 'axios';
 
-import { ProgressBarsContainer, Title, ProgressBarList, Bar, BarSelector, ButtonList, NumberRateButton } from '../src/components';
+import NumberRateButton from '../src/NumberRateButton';
+import ButtonList from '../src/ButtonList';
+import { ProgressBarsContainer, Title, ProgressBarList, Bar, BarSelector } from '../src/components';
 
 
 describe('ProgressBarsContainer', () => {
@@ -270,33 +272,6 @@ describe('ProgressBarsContainer', () => {
       expect(wrapper.html()).to.contain(`<option selected="" value="0">#progress1</option>`);
       expect(wrapper.html()).to.contain(`<option value="1">#progress2</option>`);
       expect(wrapper.html()).to.contain(`<option value="2">#progress3</option>`);
-    });
-  });
-
-  describe('ButtonList', () => {
-    it('not render rate numbers when items are undefined', () => {
-      const wrapper = shallow(<ButtonList numberRates={undefined}/>);
-
-      expect(wrapper.find('li')).to.have.length(0);
-    });
-
-    it('not render progress bars when items are empty', () => {
-      const wrapper = shallow(<ButtonList numberRates={[]}/>);
-
-      expect(wrapper.find('li')).to.have.length(0);
-    });
-
-    it('renders number rates appending positive/negative signs', () => {
-      const click = () => {};
-      const wrapper = mount(<ButtonList numberRates={[8, -2, 5]} handleClick={click}/>);
-
-      const onClickFunction = wrapper.instance().handleClick;
-
-      expect(wrapper.find('li')).to.have.length(3);
-
-      expect(wrapper.contains(<NumberRateButton value={'+8'} handleClick={onClickFunction}/>)).to.equal(true);
-      expect(wrapper.contains(<NumberRateButton value={'-2'} handleClick={onClickFunction}/>)).to.equal(true);
-      expect(wrapper.contains(<NumberRateButton value={'+5'} handleClick={onClickFunction}/>)).to.equal(true);
     });
   });
 });
