@@ -7,7 +7,8 @@ import axios from 'axios';
 import NumberRateButton from '../src/NumberRateButton';
 import ButtonList from '../src/ButtonList';
 import BarSelector from '../src/BarSelector';
-import { ProgressBarsContainer, Title, ProgressBarList, Bar } from '../src/components';
+import Bar from '../src/Bar';
+import { ProgressBarsContainer, Title, ProgressBarList } from '../src/components';
 
 
 describe('ProgressBarsContainer', () => {

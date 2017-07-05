@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 
 import style from './style.css';
 import NumberRateButton from './NumberRateButton';
-
-const MINUMUM_VALUE = 0;
+import { MINUMUM_VALUE } from './ProgressBarConfig';
 
 export default class ButtonList extends Component {
   constructor(props) {
