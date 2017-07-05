@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import style from './style';
+import style from './style.css';
 import { ONE_HUNDRED, MINUMUM_VALUE } from './ProgressBarConfig';
 
 const isGreaterThanHundredPercent = (percentageValue) => {
