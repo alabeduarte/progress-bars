@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "quik",
-    "test": "nyc --reporter=lcov --reporter=text-summary mocha tests/*.spec.js --require ./tests/setup.js --require ./tests/cssNullCompiler.js"
+    "test": "nyc --reporter=lcov --reporter=text-summary mocha tests/*.spec.js --require ./tests/utils/setup.js --require ./tests/utils/cssNullCompiler.js"
   },
   "author": "Alabê Duarte",
   "license": "ISC",
