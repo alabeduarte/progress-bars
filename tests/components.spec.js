@@ -8,8 +8,8 @@ import NumberRateButton from '../src/NumberRateButton';
 import ButtonList from '../src/ButtonList';
 import BarSelector from '../src/BarSelector';
 import Bar from '../src/Bar';
-import { ProgressBarsContainer, Title, ProgressBarList } from '../src/components';
-
+import ProgressBarList from '../src/ProgressBarList';
+import { ProgressBarsContainer, Title } from '../src/components';
 
 describe('ProgressBarsContainer', () => {
 
@@ -194,61 +194,6 @@ describe('ProgressBarsContainer', () => {
       const wrapper = shallow(<Title/>);
 
       expect(wrapper.text()).to.contain('Progress Bars');
-    });
-  });
-
-  describe('ProgressBarList', () => {
-    it('not render progress bars when items are undefined', () => {
-      const wrapper = shallow(<ProgressBarList bars={undefined}/>);
-
-      expect(wrapper.find('li')).to.have.length(0);
-    });
-
-    it('not render progress bars when items are empty', () => {
-      const wrapper = shallow(<ProgressBarList bars={[]}/>);
-
-      expect(wrapper.find('li')).to.have.length(0);
-    });
-
-    it('renders all given progress bars', () => {
-      const wrapper = shallow(<ProgressBarList bars={[62, 45]}/>);
-
-      expect(wrapper.find('li')).to.have.length(2);
-
-      expect(wrapper.contains(<li><Bar value={62}/></li>)).to.equal(true);
-      expect(wrapper.contains(<li><Bar value={45}/></li>)).to.equal(true);
-    });
-
-    describe('Bar', () => {
-      it('renders percentual representation', () => {
-        const wrapper = shallow(<Bar value={25}/>);
-
-        expect(wrapper.text()).to.contain('25%');
-      });
-
-      it('renders 0% when value is undefined', () => {
-        const wrapper = shallow(<Bar value={undefined}/>);
-
-        expect(wrapper.text()).to.contain('0%');
-      });
-
-      it('renders 0% when value is less than 0', () => {
-        const wrapper = shallow(<Bar value={-1}/>);
-
-        expect(wrapper.text()).to.contain('0%');
-      });
-
-      it('renders percentual width representation when it is below 100%', () => {
-        const wrapper = shallow(<Bar value={25}/>);
-
-        expect(wrapper.instance().percentageWidth).to.eql('25%');
-      });
-
-      it('keeps percentual width as 100% when value is beyond 100%', () => {
-        const wrapper = shallow(<Bar value={101}/>);
-
-        expect(wrapper.instance().percentageWidth).to.eql('100%');
-      });
     });
   });
 });

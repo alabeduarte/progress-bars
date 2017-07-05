@@ -5,11 +5,9 @@ import style from './style.css';
 import ButtonList from './ButtonList';
 import BarSelector from './BarSelector';
 import Bar from './Bar';
+import ProgressBarList from './ProgressBarList';
 
-const ONE_HUNDRED = 100;
-const MINUMUM_VALUE = 0;
-
-const isGreaterThanHundredPercent = (percentageValue) => percentageValue >= ONE_HUNDRED;
+import { ONE_HUNDRED, MINUMUM_VALUE } from './ProgressBarConfig';
 
 export class ProgressBarsContainer extends Component {
   constructor(props) {
@@ -78,23 +76,5 @@ export class Title extends Component {
 
   render() {
     return (<h1>Progress Bars</h1>)
-  }
-}
-
-export class ProgressBarList extends Component {
-
-  shouldComponentUpdate(nextProps) {
-    return this.props.bars.toString() !== nextProps.bars.toString();
-  }
-
-  render() {
-    return this.props.bars ?
-      (
-        <ul>
-          {this.props.bars.map( (bar, index) => (
-            <li key={index}><Bar value={bar}/></li>
-          ))}
-        </ul>
-      ) : null
   }
 }
