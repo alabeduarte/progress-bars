@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import style from './style.css';
 import ButtonList from './ButtonList';
+import BarSelector from './BarSelector';
 
 const ONE_HUNDRED = 100;
 const MINUMUM_VALUE = 0;
@@ -120,33 +121,5 @@ export class Bar extends Component {
         </div>
       </div>
     )
-  }
-}
-
-export class BarSelector extends Component {
-  constructor(props) {
-    super(props);
-
-    this.handleChange = this.handleChange.bind(this);
-  }
-
-  handleChange(event) {
-    this.props.handleChange(event.target.value);
-  }
-
-  shouldComponentUpdate(nextProps) {
-    return this.props.selectedBar !== nextProps.selectedBar ||
-          this.props.bars.toString() !== nextProps.bars.toString();
-  }
-
-  render() {
-    return this.props.bars ?
-      (
-        <select value={this.props.selectedBar} onChange={this.handleChange}>
-          {this.props.bars.map((bar, index) => (
-            <option key={index} value={index}>#progress{index + 1}</option>
-          ))}
-        </select>
-      ) : null
   }
 }

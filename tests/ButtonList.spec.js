@@ -26,8 +26,6 @@ describe('ButtonList', () => {
 
     expect(wrapper.find('li')).to.have.length(3);
 
-    console.dir(wrapper.find('li'));
-
     expect(wrapper.contains(<NumberRateButton value={'+8'} handleClick={onClickFunction}/>)).to.equal(true);
     expect(wrapper.contains(<NumberRateButton value={'-2'} handleClick={onClickFunction}/>)).to.equal(true);
     expect(wrapper.contains(<NumberRateButton value={'+5'} handleClick={onClickFunction}/>)).to.equal(true);
