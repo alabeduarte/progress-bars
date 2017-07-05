@@ -14,7 +14,8 @@ export default class Bar extends Component {
 
   get percentageWidth() {
     const width = isGreaterThanHundredPercent(this.percentageValue) ?
-    ONE_HUNDRED : this.percentageValue;
+      ONE_HUNDRED : this.percentageValue;
+
     return `${width}%`;
   }
 

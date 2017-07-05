@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import style from './style.css';
 import ButtonList from './ButtonList';
 import BarSelector from './BarSelector';
 import Bar from './Bar';

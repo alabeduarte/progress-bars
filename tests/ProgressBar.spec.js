@@ -9,7 +9,7 @@ import ButtonList from '../src/ButtonList';
 import BarSelector from '../src/BarSelector';
 import Bar from '../src/Bar';
 import ProgressBarList from '../src/ProgressBarList';
-import { ProgressBarsContainer, Title } from '../src/components';
+import { ProgressBarsContainer, Title } from '../src/ProgressBar';
 
 describe('ProgressBarsContainer', () => {
 
